@@ -10,23 +10,25 @@ class Auth extends BaseController
     }
 
     public function process()
-    {
-        $session = session();
+{
+    $session = session();
+    $username = $this->request->getPost('username');
+    $password = $this->request->getPost('password');
 
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
-
-        if ($username == 'admin' && $password == '123') {
-            $session->set([
-            'username'   => $username,
+    if ($username == 'admin' && $password == '123') {
+        $session->set([
+            'username'   => 'admin',
+            'role'       => 'admin',
+            'email'      => 'admin@dsn.dinus.ac.id',
+            'logged_in'  => date('Y-m-d H:i:s'),
             'isLoggedIn' => true,
         ]);
-            return redirect()->to('/home');
-        } else {
-            $session->setFlashdata('error', 'Username & Password Salah');
-            return redirect()->to('/login');
-        }
+        return redirect()->to('/home');
+    } else {
+        $session->setFlashdata('error', 'Username & Password Salah');
+        return redirect()->to('/login');
     }
+}
 
     public function logout()
     {

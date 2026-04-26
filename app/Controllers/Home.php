@@ -72,26 +72,35 @@ class Home extends BaseController
 
     return view('v_keranjang', $data);
 }
-public function hapus($id)
-{
-    $keranjang = $this->session->get('keranjang') ?? [];
+    public function hapus($id)
+    {
+        $keranjang = $this->session->get('keranjang') ?? [];
 
-    // cari index dan hapus
-    $key = array_search($id, $keranjang);
-    if ($key !== false) {
-        unset($keranjang[$key]);
+        // cari index dan hapus
+        $key = array_search($id, $keranjang);
+        if ($key !== false) {
+            unset($keranjang[$key]);
+        }
+
+        // simpan lagi ke session
+        $this->session->set('keranjang', $keranjang);
+
+        return redirect()->to('/home/keranjang');
     }
-
-    // simpan lagi ke session
-    $this->session->set('keranjang', $keranjang);
-
-    return redirect()->to('/home/keranjang');
-}
-public function logout()
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/login');
+    }
+public function profile()
 {
-    session()->destroy();
-    return redirect()->to('/login');
+    $data = [
+        'username' => session()->get('username'),
+        'role'     => session()->get('role'),
+        'email'    => session()->get('email'),
+        'waktu'    => session()->get('logged_in'),
+    ];
+    return view('v_profile', $data);
 }
-
 }
 
